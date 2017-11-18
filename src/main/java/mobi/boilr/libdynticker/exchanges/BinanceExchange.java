@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class BinanceExchange extends mobi.boilr.libdynticker.core.Exchange {
-    BinanceExchange(long expiredPeriod) {
+    public BinanceExchange(long expiredPeriod) {
         super("Binance", expiredPeriod);
     }
 
@@ -22,8 +22,8 @@ public class BinanceExchange extends mobi.boilr.libdynticker.core.Exchange {
         for (JsonNode node:jsonNode) {
             String symbol = node.get("symbol").asText();
             if(symbol.chars().allMatch(Character::isLetter)){
-                String coin = symbol.replace(Exchange.matchExchange(), "");
-                String exchange = symbol.replace(coin, "");
+                String coin = symbol.replaceFirst(Exchange.matchExchange(), "");
+                String exchange = symbol.replaceFirst(coin, "");
                 pairs.add(new Pair(coin, exchange));
             }
         }
@@ -40,7 +40,7 @@ public class BinanceExchange extends mobi.boilr.libdynticker.core.Exchange {
     }
 
     @Override
-    public String parseTicker(JsonNode node, Pair pair) throws IOException, NoMarketDataException {
+    public String parseTicker(JsonNode node, Pair pair) throws IOException {
         return node.get("lastPrice").asText();
     }
 
@@ -51,14 +51,14 @@ public class BinanceExchange extends mobi.boilr.libdynticker.core.Exchange {
         USDT;
 
         public static String matchExchange(){
-            StringBuilder sb = new StringBuilder("\\");
+            StringBuilder sb = new StringBuilder("(");
             Iterator<Exchange> iterator = Arrays.asList(Exchange.values()).iterator();
             while(iterator.hasNext()){
                 sb.append(iterator.next());
                 if(iterator.hasNext()){
                     sb.append("|");
                 }else {
-                    sb.append("$");
+                    sb.append(")$");
                 }
             }
             return sb.toString();
