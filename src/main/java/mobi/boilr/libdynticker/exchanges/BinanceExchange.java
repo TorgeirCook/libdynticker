@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class BinanceExchange extends mobi.boilr.libdynticker.core.Exchange {
-    public BinanceExchange(long expiredPeriod) {
+    BinanceExchange(long expiredPeriod) {
         super("Binance", expiredPeriod);
     }
 
